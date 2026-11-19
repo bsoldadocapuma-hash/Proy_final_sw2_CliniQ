@@ -62,3 +62,29 @@
 .med-btn:hover { background: var(--verde-claro); }
 .med-btn--solido { background: var(--verde); color: #fff; }
 .med-btn--solido:hover { background: #256a4c; }
+
+/* Firma digital + bandeja de emails simulada (componente FirmaDigital) */
+.fdg-page {
+  --verde: #2e7d5b; --verde-claro: #e6f3ec; --fondo: #f3f5f4;
+  --texto: #0f172a; --suave: #64748b; --rojo: #dc2626; --rojo-claro: #fde8e8;
+  max-width: 1100px; margin: 0 auto; padding: 40px 24px 64px; color: var(--texto);
+}
+.fdg-cab h1 { margin: 0; font-size: 32px; font-weight: 800; }
+.fdg-cab p { margin: 4px 0 24px; color: var(--suave); font-size: 15px; max-width: 700px; }
+.fdg-tarjeta { background: var(--fondo); border-radius: 20px; padding: 28px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 14px; }
+.fdg-tarjeta h2 { margin: 0; font-size: 18px; font-weight: 700; }
+.fdg-sub { margin: 0; font-size: 13px; color: var(--suave); line-height: 1.6; }
+.fdg-sub code { font-size: 12px; background: #e2e8f0; padding: 1px 6px; border-radius: 6px; }
+.fdg-aviso { margin: 0; padding: 10px 14px; border-radius: 10px; background: var(--rojo-claro); color: var(--rojo); font-size: 13px; }
+.fdg-firma { background: #fff; border: 1px solid #e8ecea; border-left: 4px solid var(--verde); border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
+.fdg-firma-trazo { font-family: "Brush Script MT", "Segoe Script", cursive; font-size: 34px; color: var(--verde); line-height: 1.2; }
+.fdg-acciones { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.fdg-historial { font-size: 13px; color: var(--suave); }
+.fdg-historial summary { cursor: pointer; margin-bottom: 6px; }
+.fdg-item { background: #fff; border: 1px solid #e8ecea; border-radius: 12px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.fdg-item--col { flex-direction: column; align-items: stretch; }
+.fdg-mail-cab { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.fdg-cuerpo { margin: 0; background: var(--fondo); border-radius: 10px; padding: 12px 14px; font: inherit; font-size: 13px; white-space: pre-wrap; }
+.fdg-chip { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: 999px; background: #e2e8f0; color: #475569; }
+.fdg-chip--ok { background: var(--verde-claro); color: var(--verde); }
+.fdg-chip--mal { background: var(--rojo-claro); color: var(--rojo); }

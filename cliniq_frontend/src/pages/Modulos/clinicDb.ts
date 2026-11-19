@@ -421,3 +421,241 @@ export async function verificarEvidencia(db: DB, ev: EvidenciaBlockchain): Promi
 export function marcarAlertaRevisada(id: number, revisada = true) {
   mutar((db) => { const a = db.alertas.find((x) => x.id === id); if (a) a.revisada = revisada; });
 }
+
+/* ═════════════ Firma digital del médico + envío SIMULADO de PDF por email ═════════════
+ * Todo en listas de localStorage:
+ *   cliniq_firmas → FirmaMedico[]   (firmas creadas; solo una "activa" por médico)
+ *   cliniq_emails → EmailEnviado[]  (bandeja de salida simulada; el PDF va en base64)
+ * Con backend: crearFirma → POST /api/firmas · enviarExpedientePorEmail → POST /api/recetas/:id/enviar
+ */
+export interface FirmaMedico {
+  id: number; medico_id: number;
+  nombre_firma: string;                 // texto que aparece como firma en el PDF
+  pin_hash: string; pin_salt: string;   // PIN que autoriza cada firma (solo se guarda el hash)
+  pub_key: string;                      // clave pública ECDSA (JWK)
+  huella: string;                       // SHA-256 corto de la clave pública
+  fecha_creacion: string; hora: string;
+  activa: boolean;
+}
+export interface EmailEnviado {
+  id: number; cita_id: number; paciente_id: number; destinatario: string;
+  asunto: string; cuerpo: string; adjunto_nombre: string; adjunto_base64: string;
+  fecha: string; hora: string; estado: "Enviado" | "Fallido";
+}
+
+const K_FIRMAS = "cliniq_firmas";
+const K_EMAILS = "cliniq_emails";
+const EVT_EXTRA = "cliniq-extra-change";
+const horaActual = () => { const d = new Date(); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+
+function leerLista<T>(k: string): T[] {
+  try { return JSON.parse(localStorage.getItem(k) || "[]") as T[]; } catch { return []; }
+}
+function escribirLista<T>(k: string, lista: T[]) {
+  localStorage.setItem(k, JSON.stringify(lista));
+  window.dispatchEvent(new Event(EVT_EXTRA));
+}
+function useLista<T>(k: string): T[] {
+  const [l, setL] = useState<T[]>(() => leerLista<T>(k));
+  useEffect(() => {
+    const sync = () => setL(leerLista<T>(k));
+    window.addEventListener(EVT_EXTRA, sync);
+    window.addEventListener("storage", sync);
+    return () => { window.removeEventListener(EVT_EXTRA, sync); window.removeEventListener("storage", sync); };
+  }, [k]);
+  return l;
+}
+export const useFirmas = () => useLista<FirmaMedico>(K_FIRMAS);
+export const useEmails = () => useLista<EmailEnviado>(K_EMAILS);
+export const firmaActiva = (firmas: FirmaMedico[], medico_id: number) => firmas.find((f) => f.medico_id === medico_id && f.activa);
+export function resetFirmasYEmails() { escribirLista(K_FIRMAS, []); escribirLista(K_EMAILS, []); }
+
+/** Crea la firma digital: genera el par ECDSA P-256, guarda el hash del PIN y la deja activa.
+ *  La clave privada queda en localStorage SOLO para pruebas (en producción: wallet/HSM). */
+export async function crearFirma(medico_id: number, nombre_firma: string, pin: string): Promise<Resultado> {
+  if (!nombre_firma.trim()) return { ok: false, error: "Escribe el nombre que aparecerá en tu firma." };
+  if (!/^\d{4,8}$/.test(pin)) return { ok: false, error: "El PIN debe tener entre 4 y 8 dígitos." };
+
+  const par = await crypto.subtle.generateKey(ALG, true, ["sign", "verify"]);
+  const privJwk = JSON.stringify(await crypto.subtle.exportKey("jwk", par.privateKey));
+  const pubJwk = JSON.stringify(await crypto.subtle.exportKey("jwk", par.publicKey));
+  const salt = (await sha256(String(Math.random()) + Date.now())).slice(0, 16);
+
+  // Es la misma clave que lee clavesDelMedico(): emitirExpediente() firmará con ESTA clave.
+  localStorage.setItem("cliniq_privkey_" + medico_id, privJwk);
+  mutar((db) => { const u = db.usuarios.find((x) => x.id === medico_id); if (u) u.blockchain_pub_key = pubJwk; });
+
+  const lista = leerLista<FirmaMedico>(K_FIRMAS).map((f) => (f.medico_id === medico_id ? { ...f, activa: false } : f));
+  lista.push({
+    id: nextId(lista), medico_id, nombre_firma: nombre_firma.trim(),
+    pin_hash: await sha256(salt + pin), pin_salt: salt,
+    pub_key: pubJwk, huella: (await sha256(pubJwk)).slice(0, 24),
+    fecha_creacion: hoy(), hora: horaActual(), activa: true,
+  });
+  escribirLista(K_FIRMAS, lista);
+  return { ok: true };
+}
+
+/** Revoca la firma activa y borra la clave privada. Las evidencias ya emitidas siguen verificándose. */
+export function revocarFirma(medico_id: number) {
+  localStorage.removeItem("cliniq_privkey_" + medico_id);
+  mutar((db) => { const u = db.usuarios.find((x) => x.id === medico_id); if (u) delete u.blockchain_pub_key; });
+  escribirLista(K_FIRMAS, leerLista<FirmaMedico>(K_FIRMAS).map((f) => (f.medico_id === medico_id ? { ...f, activa: false } : f)));
+}
+
+export async function verificarPin(medico_id: number, pin: string): Promise<boolean> {
+  const f = firmaActiva(leerLista<FirmaMedico>(K_FIRMAS), medico_id);
+  return !!f && (await sha256(f.pin_salt + pin)) === f.pin_hash;
+}
+
+/* ───────────── Generador de PDF (sin librerías, Helvetica, A4) ───────────── */
+interface LineaPDF { t: string; b?: boolean; s?: number }
+
+function escPDF(s: string) {
+  let o = "";
+  for (const ch of s) {
+    const c = ch.charCodeAt(0);
+    if (ch === "(" || ch === ")" || ch === "\\") o += "\\" + ch;
+    else if (c >= 32 && c < 127) o += ch;
+    else if (c < 256) o += "\\" + c.toString(8).padStart(3, "0"); // á, é, ñ… (WinAnsi)
+    else o += "?";
+  }
+  return o;
+}
+function ajustar(t: string, n = 88): string[] {
+  const out: string[] = []; let cur = "";
+  for (const w of t.split(" ")) {
+    let word = w;
+    while (word.length > n) { if (cur) { out.push(cur); cur = ""; } out.push(word.slice(0, n)); word = word.slice(n); }
+    if ((cur + " " + word).trim().length > n) { out.push(cur); cur = word; } else cur = (cur + " " + word).trim();
+  }
+  if (cur) out.push(cur);
+  return out.length ? out : [""];
+}
+
+/** Devuelve el PDF en base64. */
+function generarPDF(lineas: LineaPDF[]): string {
+  const paginas: LineaPDF[][] = [[]];
+  let y = 790;
+  for (const l of lineas) {
+    const alto = (l.s ?? 10) + 6;
+    if (y - alto < 50) { paginas.push([]); y = 790; }
+    paginas[paginas.length - 1].push({ ...l, s: l.s ?? 10, t: String(y) + "|" + l.t });
+    y -= alto;
+  }
+  const n = paginas.length;
+  const objs: string[] = [];
+  objs.push("<< /Type /Catalog /Pages 2 0 R >>");
+  objs.push(`<< /Type /Pages /Kids [${paginas.map((_, i) => `${5 + 2 * i} 0 R`).join(" ")}] /Count ${n} >>`);
+  objs.push("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>");
+  objs.push("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>");
+  paginas.forEach((p, i) => {
+    objs.push(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${6 + 2 * i} 0 R >>`);
+    const cont = p.map((l) => {
+      const [yy, ...resto] = l.t.split("|");
+      return `BT /${l.b ? "F2" : "F1"} ${l.s} Tf 50 ${yy} Td (${escPDF(resto.join("|"))}) Tj ET`;
+    }).join("\n") + `\nBT /F1 8 Tf 50 30 Td (${escPDF(`ClinIQ - documento generado el ${hoy()} - Pagina ${i + 1} de ${n}`)}) Tj ET`;
+    objs.push(`<< /Length ${cont.length} >>\nstream\n${cont}\nendstream`);
+  });
+
+  let out = "%PDF-1.4\n";
+  const offs: number[] = [];
+  objs.forEach((o, i) => { offs.push(out.length); out += `${i + 1} 0 obj\n${o}\nendobj\n`; });
+  const xr = out.length;
+  out += `xref\n0 ${objs.length + 1}\n0000000000 65535 f \n`;
+  offs.forEach((o) => { out += String(o).padStart(10, "0") + " 00000 n \n"; });
+  out += `trailer\n<< /Size ${objs.length + 1} /Root 1 0 R >>\nstartxref\n${xr}\n%%EOF`;
+  return btoa(out);
+}
+
+/** Contenido del PDF a partir de lo guardado (diagnóstico, receta, firma y evidencia). */
+function lineasExpediente(db: DB, cita_id: number, ev: EvidenciaBlockchain, firma?: FirmaMedico): LineaPDF[] {
+  const c = db.citas.find((x) => x.id === cita_id)!;
+  const dg = db.diagnosticos.filter((d) => d.cita_id === cita_id).slice(-1)[0];
+  const r = db.recetas.find((x) => x.cita_id === cita_id);
+  const meds: DetalleReceta[] = r ? db.detalles_receta.filter((d) => d.receta_id === r.id) : [];
+  const L: LineaPDF[] = [];
+  const h = (t: string) => { L.push({ t: "", s: 6 }); L.push({ t, b: true, s: 12 }); };
+  const p = (t: string) => ajustar(t).forEach((x) => L.push({ t: x }));
+
+  L.push({ t: "ClinIQ - Receta y resumen de consulta", b: true, s: 18 });
+  L.push({ t: "Documento firmado digitalmente por el medico", s: 10 });
+  h("Datos de la consulta");
+  p(`Paciente: ${nombreUsuario(db, c.paciente_id)}`);
+  p(`Medico: ${nombreUsuario(db, c.medico_id)} - ${nombreEspecialidad(db, c.especialidad_id)}`);
+  p(`Fecha: ${c.fecha} ${c.hora_inicio} - Modalidad: ${c.modalidad}`);
+  p(`Motivo: ${c.motivo}`);
+  const al = alergiasDe(db, c.paciente_id);
+  p(`Alergias registradas: ${al.length ? al.join(", ") : "ninguna"}`);
+  h("Diagnostico");
+  p(dg?.descripcion || "-");
+  h("Indicaciones");
+  p(dg?.indicacion || "-");
+  h("Medicamentos recetados");
+  if (!meds.length) p("Sin medicamentos.");
+  meds.forEach((m, i) => p(`${i + 1}. ${m.medicamento} - ${m.dosis} - ${m.frecuencia} - ${m.duracion} - Via: ${m.via_administracion}`));
+  h("Firma digital");
+  if (firma) L.push({ t: firma.nombre_firma, b: true, s: 16 });
+  p(`Firmado por: ${nombreUsuario(db, c.medico_id)} el ${ev.fecha} a las ${ev.hora}`);
+  p(`Hash SHA-256 del documento: ${ev.hash_documento}`);
+  p(`Firma ECDSA (P-256, base64): ${ev.firma}`);
+  p(`Huella de clave publica: ${firma?.huella ?? "-"}`);
+  p(`Transaccion en red (simulada): ${ev.tx_hash_red}`);
+  L.push({ t: "", s: 6 });
+  p("Este documento puede verificarse recalculando su hash y validando la firma con la clave publica del medico.");
+  return L;
+}
+
+/* ───────────── Envío simulado por email ───────────── */
+/** Genera el PDF y lo "envía": lo agrega a cliniq_emails y marca la receta como enviada. */
+export async function enviarExpedientePorEmail(cita_id: number, evidencia?: EvidenciaBlockchain): Promise<EmailEnviado> {
+  const db = cargarDB();
+  const c = db.citas.find((x) => x.id === cita_id)!;
+  const ev = evidencia ?? db.evidencias.filter((e) => e.cita_id === cita_id).slice(-1)[0];
+  if (!ev) throw new Error("La cita aún no tiene expediente firmado.");
+
+  const firma = leerLista<FirmaMedico>(K_FIRMAS).find((f) => f.pub_key === ev.medico_pub_key);
+  const destinatario = db.usuarios.find((u) => u.id === c.paciente_id)?.email ?? "";
+  const pdf = generarPDF(lineasExpediente(db, cita_id, ev, firma));
+  await new Promise((r) => setTimeout(r, 600)); // simula la latencia del servidor de correo
+
+  const lista = leerLista<EmailEnviado>(K_EMAILS);
+  const mail: EmailEnviado = {
+    id: nextId(lista), cita_id, paciente_id: c.paciente_id, destinatario,
+    asunto: `Tu receta y resumen de consulta - ${c.fecha}`,
+    cuerpo: `Hola ${nombreUsuario(db, c.paciente_id)},\n\nAdjuntamos el PDF con el diagnóstico, las indicaciones y la receta de tu consulta del ${c.fecha}, firmado digitalmente por ${nombreUsuario(db, c.medico_id)}.\n\nClinIQ`,
+    adjunto_nombre: `receta_cita_${cita_id}.pdf`, adjunto_base64: pdf,
+    fecha: hoy(), hora: horaActual(), estado: destinatario ? "Enviado" : "Fallido",
+  };
+  lista.push(mail);
+  escribirLista(K_EMAILS, lista);
+
+  if (mail.estado === "Enviado")
+    mutar((d) => { const r = d.recetas.find((x) => x.cita_id === cita_id); if (r) { r.estado_envio_email = true; r.pdf_generado_url = `local://emails/${mail.id}`; } });
+  return mail;
+}
+
+/** Flujo completo: valida firma + PIN → finaliza consulta, firma y ancla la evidencia → envía el PDF al paciente. */
+export async function emitirYEnviar(
+  cita_id: number,
+  d: { diagnostico: string; indicacion: string; medicamentos: Omit<DetalleReceta, "id" | "receta_id">[] },
+  pin: string
+): Promise<{ ok: true; evidencia: EvidenciaBlockchain; email: EmailEnviado } | { ok: false; error: string }> {
+  const medico_id = cargarDB().citas.find((c) => c.id === cita_id)?.medico_id;
+  if (!medico_id) return { ok: false, error: "La cita no tiene médico asignado." };
+  if (!firmaActiva(leerLista<FirmaMedico>(K_FIRMAS), medico_id)) return { ok: false, error: "Primero crea tu firma digital." };
+  if (!(await verificarPin(medico_id, pin))) return { ok: false, error: "PIN incorrecto." };
+  const evidencia = await emitirExpediente(cita_id, d);
+  const email = await enviarExpedientePorEmail(cita_id, evidencia);
+  return { ok: true, evidencia, email };
+}
+
+/** Abre o descarga el PDF adjunto de un correo de la bandeja simulada. */
+export function descargarPDF(m: EmailEnviado, abrir = false) {
+  const bin = atob(m.adjunto_base64);
+  const url = URL.createObjectURL(new Blob([Uint8Array.from(bin, (ch) => ch.charCodeAt(0))], { type: "application/pdf" }));
+  if (abrir) { window.open(url, "_blank"); return; }
+  const a = document.createElement("a");
+  a.href = url; a.download = m.adjunto_nombre; a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}

@@ -3,7 +3,9 @@ import "./CrearExpediente.css";
 import "../../ClinIQExtras.css";
 import {
   useDB, usuarioActual, nombreUsuario, alergiasDe, conflictoAlergia,
-  emitirExpediente, verificarEvidencia, type EvidenciaBlockchain,
+  verificarEvidencia, type EvidenciaBlockchain, type EmailEnviado,
+  useFirmas, useEmails, firmaActiva, crearFirma, revocarFirma,
+  emitirYEnviar, enviarExpedientePorEmail, descargarPDF,
 } from "../../clinicDb";
 
 type FilaMed = { medicamento_id: number; dosis: string; frecuencia: string; duracion: string; via_administracion: string };
@@ -27,6 +29,33 @@ export const CrearExpediente: React.FC = () => {
   const [error, setError] = useState("");
   const [resultado, setResultado] = useState<EvidenciaBlockchain | null>(null);
   const [verif, setVerif] = useState<Record<number, Verif>>({});
+
+  /* ── Firma digital del médico + emails simulados ── */
+  const firmas = useFirmas();
+  const emails = useEmails();
+  const activa = firmaActiva(firmas, yo.id);
+  const [pin, setPin] = useState("");
+  const [nombreFirma, setNombreFirma] = useState(yo.nombre);
+  const [pinNuevo, setPinNuevo] = useState("");
+  const [pinNuevo2, setPinNuevo2] = useState("");
+  const [errorFirma, setErrorFirma] = useState("");
+  const [creandoNueva, setCreandoNueva] = useState(false);
+  const [enviandoMail, setEnviandoMail] = useState<number | null>(null);
+  const [verMail, setVerMail] = useState<number | null>(null);
+  const [emailResultado, setEmailResultado] = useState<EmailEnviado | null>(null);
+
+  const crearNuevaFirma = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (pinNuevo !== pinNuevo2) return setErrorFirma("Los PIN no coinciden.");
+    const r = await crearFirma(yo.id, nombreFirma, pinNuevo);
+    if (!r.ok) return setErrorFirma(r.error);
+    setErrorFirma(""); setPinNuevo(""); setPinNuevo2(""); setCreandoNueva(false);
+  };
+  const reenviar = async (cita_id: number) => {
+    setEnviandoMail(cita_id);
+    try { await enviarExpedientePorEmail(cita_id); } catch (e) { setError(e instanceof Error ? e.message : "No se pudo enviar el correo."); }
+    setEnviandoMail(null);
+  };
 
   /* ── Paso 1: citas del médico listas para atender ── */
   const activas = db.citas
@@ -60,7 +89,7 @@ export const CrearExpediente: React.FC = () => {
     setConfirmaAlergia(false);
   };
 
-  const puedeFirmar = !!cita && diagnostico.trim().length > 0 && !enviando && (!hayConflicto || confirmaAlergia);
+  const puedeFirmar = !!cita && !!activa && pin.length >= 4 && diagnostico.trim().length > 0 && !enviando && (!hayConflicto || confirmaAlergia);
 
   /* ── Paso 4: firmar y registrar ── */
   const firmar = async () => {
@@ -71,8 +100,10 @@ export const CrearExpediente: React.FC = () => {
         medicamento_id: f.medicamento_id, medicamento: etiquetaMed(f.medicamento_id),
         dosis: f.dosis.trim(), frecuencia: f.frecuencia.trim(), duracion: f.duracion.trim(), via_administracion: f.via_administracion,
       }));
-      const ev = await emitirExpediente(cita.id, { diagnostico, indicacion, medicamentos });
-      setResultado(ev);
+      // Valida firma + PIN, firma el expediente, registra la evidencia y envía el PDF al email del paciente
+      const r = await emitirYEnviar(cita.id, { diagnostico, indicacion, medicamentos }, pin);
+      if (!r.ok) { setError(r.error); return; }
+      setResultado(r.evidencia); setEmailResultado(r.email); setPin("");
       setDiagnostico(""); setIndicacion(""); setMeds([filaVacia()]); setConfirmaAlergia(false); setCitaId(0);
     } catch (e) {
       setError("No se pudo firmar el expediente: " + (e instanceof Error ? e.message : "error desconocido"));
@@ -126,8 +157,12 @@ export const CrearExpediente: React.FC = () => {
             <dt>Transacción en la red</dt><dd>{resultado.tx_hash_red}</dd>
             <dt>Firma digital (ECDSA)</dt><dd>{corto(resultado.firma, 24, 12)}</dd>
             <dt>Fecha y hora</dt><dd>{resultado.fecha} · {resultado.hora}</dd>
+            {emailResultado && (<>
+              <dt>PDF enviado por email</dt>
+              <dd>{emailResultado.estado === "Enviado" ? `✓ ${emailResultado.destinatario}` : "✗ El paciente no tiene email registrado"}</dd>
+            </>)}
           </dl>
-          <button className="med-btn" onClick={() => setResultado(null)}>Cerrar</button>
+          <button className="med-btn" onClick={() => { setResultado(null); setEmailResultado(null); }}>Cerrar</button>
         </section>
       )}
 
@@ -208,8 +243,45 @@ export const CrearExpediente: React.FC = () => {
                   Después no se puede modificar sin que la verificación lo detecte.
                 </p>
                 {error && <p className="frm-aviso">{error}</p>}
+
+                {activa ? (
+                  <div className="fdg-firma">
+                    <div className="fdg-firma-trazo">{activa.nombre_firma}</div>
+                    <p className="fdg-sub"><strong>Firma digital activa</strong> · creada {activa.fecha_creacion} {activa.hora} · huella <code>{activa.huella}</code></p>
+                    <div className="fdg-acciones">
+                      <button type="button" className="med-btn" onClick={() => setCreandoNueva((v) => !v)}>{creandoNueva ? "Cancelar" : "Generar nueva firma"}</button>
+                      <button type="button" className="med-btn med-btn--peligro" onClick={() => { if (confirm("¿Revocar tu firma? No podrás firmar expedientes hasta crear otra.")) revocarFirma(yo.id); }}>Revocar firma</button>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="frm-aviso">Aún no tienes firma digital. Créala para poder firmar expedientes y enviarlos por email al paciente.</p>
+                )}
+
+                {(!activa || creandoNueva) && (
+                  <form className="frm" onSubmit={crearNuevaFirma}>
+                    <label className="frm-campo"><span>Nombre en la firma</span>
+                      <input value={nombreFirma} onChange={(e) => setNombreFirma(e.target.value)} />
+                    </label>
+                    <label className="frm-campo"><span>PIN (4–8 dígitos)</span>
+                      <input type="password" inputMode="numeric" value={pinNuevo} onChange={(e) => setPinNuevo(e.target.value)} />
+                    </label>
+                    <label className="frm-campo"><span>Repetir PIN</span>
+                      <input type="password" inputMode="numeric" value={pinNuevo2} onChange={(e) => setPinNuevo2(e.target.value)} />
+                    </label>
+                    {errorFirma && <p className="frm-error">{errorFirma}</p>}
+                    <div className="frm-acciones">
+                      <button className="med-btn med-btn--solido" type="submit">{activa ? "Guardar nueva firma" : "Crear firma digital"}</button>
+                    </div>
+                  </form>
+                )}
+
+                {activa && (
+                  <label className="frm-campo" style={{ maxWidth: 220, marginBottom: 12 }}><span>PIN de tu firma</span>
+                    <input type="password" inputMode="numeric" value={pin} onChange={(e) => setPin(e.target.value)} placeholder="••••" />
+                  </label>
+                )}
                 <button className="med-btn med-btn--solido" disabled={!puedeFirmar} onClick={firmar}>
-                  {enviando ? "Firmando…" : "Firmar y registrar en blockchain"}
+                  {enviando ? "Firmando y enviando…" : "Firmar, registrar y enviar PDF al paciente"}
                 </button>
               </section>
             </>
@@ -252,20 +324,53 @@ export const CrearExpediente: React.FC = () => {
         {emitidos.length === 0 && <p className="exp-vacio">Aún no has firmado expedientes.</p>}
         {emitidos.map((ev) => {
           const c = db.citas.find((x) => x.id === ev.cita_id)!;
+          const ultimo = emails.filter((m) => m.cita_id === ev.cita_id).slice(-1)[0];
           return (
             <div className="exp-emitido" key={ev.id}>
               <div>
                 <h3>{nombreUsuario(db, c.paciente_id)}</h3>
                 <p className="exp-sub">{ev.fecha} · {ev.hora} · {resumenReceta(c.id)}</p>
                 <p className="exp-sub">Hash: <code>{corto(ev.hash_documento)}</code> · Tx: <code>{corto(ev.tx_hash_red)}</code></p>
+                <p className="exp-sub">Email: {ultimo
+                  ? <span className={`fdg-chip fdg-chip--${ultimo.estado === "Enviado" ? "ok" : "mal"}`}>{ultimo.estado} a {ultimo.destinatario || "—"}</span>
+                  : <span className="fdg-chip">No enviado</span>}
+                </p>
               </div>
               <div className="exp-emitido-acc">
                 {textoVerif(verif[ev.id])}
                 <button className="med-btn" onClick={() => verificar(ev)}>Verificar integridad</button>
+                <button className="med-btn" disabled={enviandoMail === ev.cita_id} onClick={() => reenviar(ev.cita_id)}>
+                  {enviandoMail === ev.cita_id ? "Enviando…" : ultimo ? "Reenviar PDF" : "Enviar PDF"}
+                </button>
               </div>
             </div>
           );
         })}
+      </section>
+
+      {/* Bandeja de salida simulada (lista cliniq_emails en localStorage) */}
+      <section className="exp-paso">
+        <h2>Correos enviados a pacientes (simulado)</h2>
+        {emails.filter((m) => db.citas.find((c) => c.id === m.cita_id)?.medico_id === yo.id).length === 0 && <p className="exp-vacio">No hay correos enviados.</p>}
+        {emails
+          .filter((m) => db.citas.find((c) => c.id === m.cita_id)?.medico_id === yo.id)
+          .slice().reverse()
+          .map((m) => (
+            <div className="exp-emitido" key={m.id} style={{ flexDirection: "column", alignItems: "stretch" }}>
+              <div className="fdg-mail-cab">
+                <div>
+                  <h3>{m.asunto}</h3>
+                  <p className="exp-sub">Para: {m.destinatario || "(sin email)"} · {m.fecha} {m.hora} · <span className={`fdg-chip fdg-chip--${m.estado === "Enviado" ? "ok" : "mal"}`}>{m.estado}</span></p>
+                </div>
+                <div className="fdg-acciones">
+                  <button className="med-btn" onClick={() => setVerMail(verMail === m.id ? null : m.id)}>{verMail === m.id ? "Ocultar" : "Ver correo"}</button>
+                  <button className="med-btn" onClick={() => descargarPDF(m, true)}>Abrir PDF</button>
+                  <button className="med-btn" onClick={() => descargarPDF(m)}>Descargar</button>
+                </div>
+              </div>
+              {verMail === m.id && <pre className="fdg-cuerpo">{m.cuerpo}{"\n\n"}📎 {m.adjunto_nombre}</pre>}
+            </div>
+          ))}
       </section>
     </div>
   );
