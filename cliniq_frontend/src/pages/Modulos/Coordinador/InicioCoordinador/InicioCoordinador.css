@@ -1,0 +1,80 @@
+﻿.coo-page {
+  --verde: #2e7d5b;
+  --verde-claro: #e6f3ec;
+  --fondo: #f3f5f4;
+  --texto: #0f172a;
+  --suave: #64748b;
+  --rojo: #dc2626;
+  --rojo-claro: #fde8e8;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px 64px;
+  color: var(--texto);
+}
+
+.coo-cabecera { display: flex; align-items: center; gap: 20px; margin-bottom: 28px; }
+.coo-cabecera h1 { margin: 0; font-size: 32px; font-weight: 800; }
+.coo-cabecera p { margin: 4px 0 0; color: var(--suave); font-size: 15px; max-width: 620px; }
+.coo-avatar {
+  width: 72px; height: 72px; flex: none; border-radius: 50%;
+  display: grid; place-items: center; background: var(--verde-claro); color: var(--verde);
+}
+
+.coo-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.coo-stat { background: var(--fondo); border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 6px; }
+.coo-stat span { font-size: 13px; color: var(--suave); }
+.coo-stat strong { font-size: 28px; color: var(--verde); }
+
+.coo-tarjeta { background: var(--fondo); border-radius: 20px; padding: 28px; margin-bottom: 24px; }
+.coo-tarjeta-cab { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+.coo-tarjeta-cab h2 { margin: 0 0 4px; font-size: 18px; font-weight: 700; }
+.coo-tarjeta-cab p { margin: 0; font-size: 13px; color: var(--suave); }
+
+.coo-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 24px; align-items: start; }
+.coo-grid .coo-tarjeta { margin-bottom: 0; }
+
+.coo-lista { display: flex; flex-direction: column; gap: 12px; }
+.coo-item {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  background: #fff; border: 1px solid #e8ecea; border-radius: 12px; padding: 14px 16px;
+}
+.coo-hora { font-size: 18px; font-weight: 800; color: var(--verde); min-width: 56px; }
+.coo-info { flex: 1; min-width: 200px; }
+.coo-info h3 { margin: 0 0 4px; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.coo-info p { margin: 0; font-size: 13px; color: var(--suave); line-height: 1.5; }
+.coo-asignar { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
+
+.coo-campo { display: flex; flex-direction: column; gap: 4px; }
+.coo-campo span { font-size: 12px; color: var(--suave); }
+.coo-campo select {
+  font: inherit; font-size: 13px; color: var(--texto); background: #fff;
+  border: 1px solid #cbd5e1; border-radius: 8px; padding: 7px 10px; min-width: 130px;
+}
+.coo-campo select:focus-visible { outline: 3px solid #9fd3b8; outline-offset: 1px; }
+
+.coo-prio { font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: 999px; }
+.coo-prio--alta { background: var(--rojo-claro); color: var(--rojo); }
+.coo-prio--media { background: #fef3c7; color: #92400e; }
+.coo-prio--baja { background: var(--verde-claro); color: var(--verde); }
+.coo-estado { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 999px; white-space: nowrap; }
+.coo-estado--confirmada { background: var(--verde-claro); color: var(--verde); }
+.coo-estado--cancelada { background: #e2e8f0; color: #475569; }
+
+.coo-btn {
+  font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+  color: var(--verde); background: transparent; border: 1.5px solid var(--verde); border-radius: 8px; padding: 7px 14px;
+}
+.coo-btn:hover { background: var(--verde-claro); }
+.coo-btn:focus-visible { outline: 3px solid #9fd3b8; outline-offset: 2px; }
+.coo-btn--solido { background: var(--verde); color: #fff; }
+.coo-btn--solido:hover { background: #256a4c; }
+.coo-btn--solido:disabled { background: #a7c9b9; border-color: #a7c9b9; cursor: not-allowed; }
+.coo-btn--peligro { color: var(--rojo); background: var(--rojo-claro); border-color: transparent; }
+.coo-btn--peligro:hover { background: #fbd5d5; }
+.coo-vacio { margin: 0; color: var(--suave); font-size: 14px; }
+
+@media (max-width: 900px) {
+  .coo-grid { grid-template-columns: 1fr; }
+  .coo-stats { grid-template-columns: repeat(2, 1fr); }
+  .coo-cabecera { flex-direction: column; align-items: flex-start; }
+}

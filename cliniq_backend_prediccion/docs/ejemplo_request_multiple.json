@@ -1,0 +1,36 @@
+{
+  "usuario": { "edad": 58, "genero": "F", "grupo_sanguineo": "A+", "peso_kg": 82, "altura_cm": 160 },
+  "sintomas": [
+    { "nombre": "Sed excesiva", "severidad": "Alta" },
+    { "nombre": "Micción frecuente", "severidad": "Alta" },
+    { "nombre": "Visión borrosa", "severidad": "Moderada" },
+    { "nombre": "Hormigueo en extremidades", "severidad": "Moderada" },
+    { "nombre": "Fatiga", "severidad": "Moderada" }
+  ],
+  "diagnosticos": [
+    { "descripcion": "Hipertensión arterial" },
+    { "descripcion": "Dislipidemia" }
+  ],
+  "recetas": [
+    {
+      "fecha": "2026-09-10",
+      "detalles": [
+        { "medicamento": { "nombre": "Losartán", "concentracion": "50 mg" }, "dosis": "1 tableta", "frecuencia": "cada 24 horas" },
+        { "medicamento": { "nombre": "Atorvastatina", "concentracion": "20 mg" }, "dosis": "1 tableta", "frecuencia": "cada noche" }
+      ]
+    },
+    {
+      "fecha": "2026-10-15",
+      "detalles": [
+        { "medicamento": { "nombre": "Paracetamol", "concentracion": "500 mg" }, "dosis": "1 tableta", "frecuencia": "si hay dolor" }
+      ]
+    }
+  ],
+  "historial": [
+    {
+      "fecha": "2026-03-02",
+      "diagnosticos": [ { "descripcion": "Obesidad" }, { "descripcion": "Hipertensión arterial" } ],
+      "recetas": [ { "detalles": [ { "medicamento": { "nombre": "Losartán" } } ] } ]
+    }
+  ]
+}

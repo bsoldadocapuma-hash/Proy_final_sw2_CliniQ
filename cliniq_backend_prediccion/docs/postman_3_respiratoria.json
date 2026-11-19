@@ -1,0 +1,41 @@
+{
+  "usuario": {
+    "edad": 67,
+    "genero": "M",
+    "grupo_sanguineo": "B+",
+    "peso_kg": 78,
+    "altura_cm": 170
+  },
+  "sintomas": [
+    {
+      "nombre": "Tos",
+      "severidad": "Alta"
+    },
+    {
+      "nombre": "Disnea",
+      "severidad": "Alta"
+    },
+    {
+      "nombre": "Sibilancias",
+      "severidad": "Moderada"
+    },
+    {
+      "nombre": "Expectoración",
+      "severidad": "Moderada"
+    },
+    {
+      "nombre": "Fiebre",
+      "severidad": "Leve"
+    }
+  ],
+  "diagnosticos": [
+    {
+      "descripcion": "EPOC"
+    }
+  ],
+  "medicamentos": [
+    {
+      "nombre": "Salbutamol"
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+﻿.pac-page {
+  --verde: #2e7d5b;
+  --verde-claro: #e6f3ec;
+  --fondo: #f3f5f4;
+  --texto: #0f172a;
+  --suave: #64748b;
+  --rojo: #dc2626;
+  --rojo-claro: #fde8e8;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px 64px;
+  color: var(--texto);
+}
+
+.pac-cabecera { display: flex; align-items: center; gap: 20px; margin-bottom: 28px; }
+.pac-cabecera h1 { margin: 0; font-size: 32px; font-weight: 800; }
+.pac-cabecera p { margin: 4px 0 0; color: var(--suave); font-size: 15px; max-width: 620px; }
+.pac-avatar {
+  width: 72px; height: 72px; flex: none; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--verde-claro); color: var(--verde);
+}
+
+.pac-tarjeta { background: var(--fondo); border-radius: 20px; padding: 28px; margin-bottom: 24px; }
+.pac-tarjeta-cab { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
+.pac-tarjeta-cab h2 { margin: 0 0 4px; font-size: 18px; font-weight: 700; }
+.pac-tarjeta-cab p { margin: 0; font-size: 13px; color: var(--suave); }
+
+.pac-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 24px; align-items: start; }
+.pac-grid .pac-tarjeta { margin-bottom: 0; }
+
+.pac-lista { display: flex; flex-direction: column; gap: 12px; }
+.pac-item {
+  display: flex; align-items: center; gap: 16px;
+  background: #fff; border: 1px solid #e8ecea; border-radius: 12px; padding: 14px 16px;
+}
+.pac-item--destacado { background: var(--verde-claro); border-color: transparent; border-left: 4px solid var(--verde); }
+.pac-info { flex: 1; min-width: 0; }
+.pac-info h3 { margin: 0 0 4px; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.pac-info p { margin: 0; font-size: 13px; color: var(--suave); line-height: 1.5; }
+.pac-fecha { display: flex; flex-direction: column; align-items: center; min-width: 64px; color: var(--verde); }
+.pac-fecha strong { font-size: 28px; line-height: 1; }
+.pac-fecha span { font-size: 12px; margin-top: 4px; }
+.pac-acciones { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+
+.pac-badge { background: var(--verde); color: #fff; font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: 999px; }
+.pac-estado { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 999px; white-space: nowrap; }
+.pac-estado--confirmada { background: var(--verde-claro); color: var(--verde); }
+.pac-estado--solicitada { background: #fef3c7; color: #92400e; }
+.pac-estado--cancelada { background: #e2e8f0; color: #475569; }
+
+.pac-btn {
+  display: inline-block; font: inherit; font-size: 13px; font-weight: 600; text-decoration: none; cursor: pointer;
+  color: var(--verde); background: transparent; border: 1.5px solid var(--verde);
+  border-radius: 8px; padding: 7px 14px;
+}
+.pac-btn:hover { background: var(--verde-claro); }
+.pac-btn:focus-visible { outline: 3px solid #9fd3b8; outline-offset: 2px; }
+.pac-btn--solido { background: var(--verde); color: #fff; }
+.pac-btn--solido:hover { background: #256a4c; }
+.pac-btn--peligro { color: var(--rojo); background: var(--rojo-claro); border-color: transparent; }
+.pac-btn--peligro:hover { background: #fbd5d5; }
+
+.pac-resumen { display: flex; flex-direction: column; gap: 12px; }
+.pac-dato { display: flex; justify-content: space-between; align-items: center; background: #fff; border-radius: 12px; padding: 14px 16px; }
+.pac-dato span { font-size: 13px; color: var(--suave); }
+.pac-dato strong { font-size: 22px; color: var(--verde); }
+.pac-vacio { margin: 0; color: var(--suave); font-size: 14px; }
+
+@media (max-width: 860px) {
+  .pac-grid { grid-template-columns: 1fr; }
+  .pac-item { flex-wrap: wrap; }
+  .pac-cabecera { flex-direction: column; align-items: flex-start; }
+}

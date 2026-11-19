@@ -1,0 +1,36 @@
+<div class="modal-overlay">
+  <div class="modal-box register-box">
+    <button class="close-btn">&times;</button>
+    <div class="modal-layout">
+      <!-- LADO IZQUIERDO -->
+      <div class="modal-left">
+        <span class="modal-greeting">NUEVO PACIENTE</span>
+        <h2 class="modal-title">Crea tu cuenta gratis</h2>
+        <form class="auth-form">
+          <label>Nombre completo</label>
+          <input type="text" placeholder="Ej. Juan Pérez" required />
+          <label>Carnet de Identidad (CI)</label>
+          <input type="number" placeholder="Ingresa tu documento" required />
+          <label>Dirección de correo electrónico</label>
+          <input type="email" placeholder="tucorreo@email.com" required />
+          <label>Contraseña</label>
+          <input type="password" placeholder="Crea una contraseña segura" required />
+          <button type="button" class="btn-submit">REGISTRARSE</button>
+        </form>
+        <div class="auth-prompt">
+          ¿Ya tienes una cuenta? <span class="switch-link">Inicia sesión aquí</span>
+        </div>
+      </div>
+
+      <!-- LADO DERECHO -->
+      <div class="modal-right">
+        <div class="info-bubble bubble-green">
+          <p>
+            <em>Tu información de salud es confidencial.</em><br /><br />
+            Al registrarte, tu expediente será protegido mediante un hash criptográfico en nuestra red Blockchain.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

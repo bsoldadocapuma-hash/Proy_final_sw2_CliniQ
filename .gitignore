@@ -1,0 +1,23 @@
+# Dependencias y builds
+**/node_modules/
+**/target/
+**/.venv/
+**/venv/
+**/__pycache__/
+*.pyc
+
+# Archivos de entorno y temporales
+**/.env
+~$*
+# Modelos pesados de ML
+*.joblib
+*.pkl
+*.h5
+*.pt
+*.onnx
+**/models/*.joblib
+**/models/*.pkl
+cliniq_backend_triaje/models/*
+cliniq_backend_prediccion/models/*
+*.joblib
+

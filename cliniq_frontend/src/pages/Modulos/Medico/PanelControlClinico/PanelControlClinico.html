@@ -1,0 +1,81 @@
+﻿<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClinIQ - Panel de Control Clínico</title>
+    <link rel="stylesheet" href="PanelControlClinico.css" />
+  </head>
+  <body>
+    <!-- Estructura que renderiza PanelControlClinico.tsx (referencia estática) -->
+    <div class="med-page">
+      <header class="med-cabecera">
+        <div class="med-avatar">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-7 4 14 3-7h4" /></svg>
+        </div>
+        <div>
+          <h1>Panel de Control Clínico</h1>
+          <p>Tu agenda de hoy. Las citas las asigna la coordinación; la prioridad es una sugerencia del triaje y no un diagnóstico.</p>
+        </div>
+      </header>
+
+      <div class="med-stats">
+        <div class="med-stat"><span>Citas de hoy</span><strong>3</strong></div>
+        <div class="med-stat"><span>Virtuales</span><strong>2</strong></div>
+        <div class="med-stat"><span>Atendidas</span><strong>0</strong></div>
+        <div class="med-stat"><span>Alertas de riesgo</span><strong>2</strong></div>
+      </div>
+
+      <div class="med-grid">
+        <section class="med-tarjeta">
+          <div class="med-tarjeta-cab"><div><h2>Agenda de hoy</h2><p>Pacientes asignados a tu horario.</p></div></div>
+          <div class="med-lista">
+            <div class="med-item med-item--activo">
+              <div class="med-hora">09:00</div>
+              <div class="med-info">
+                <h3>María Gómez <span class="med-prio med-prio--alta">Prioridad Alta</span></h3>
+                <p>Dolor torácico leve · Presencial</p>
+              </div>
+              <div class="med-acciones">
+                <button class="med-btn med-btn--solido">Finalizar y emitir receta</button>
+                <button class="med-btn">Ver expediente</button>
+              </div>
+            </div>
+            <div class="med-item">
+              <div class="med-hora">09:30</div>
+              <div class="med-info">
+                <h3>Carlos Pérez <span class="med-prio med-prio--media">Prioridad Media</span></h3>
+                <p>Control de hipertensión · Virtual</p>
+              </div>
+              <div class="med-acciones">
+                <button class="med-btn med-btn--solido">Iniciar consulta</button>
+                <button class="med-btn">Ver expediente</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="med-columna">
+          <section class="med-tarjeta">
+            <div class="med-tarjeta-cab"><div><h2>Mi horario semanal</h2><p>Disponibilidad registrada.</p></div></div>
+            <div class="med-lista">
+              <div class="med-dato"><span>Lunes</span><strong>08:00 – 14:00</strong></div>
+              <div class="med-dato"><span>Miércoles</span><strong>08:00 – 14:00</strong></div>
+            </div>
+          </section>
+          <section class="med-tarjeta">
+            <div class="med-tarjeta-cab"><div><h2>Alertas de riesgo</h2><p>Apoyo a tu decisión clínica.</p></div></div>
+            <div class="med-lista">
+              <div class="med-item med-item--alerta">
+                <div class="med-info">
+                  <h3>María Gómez <span class="med-prio med-prio--alta">Riesgo alto</span></h3>
+                  <p>Patrón asociado a riesgo cardiovascular</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

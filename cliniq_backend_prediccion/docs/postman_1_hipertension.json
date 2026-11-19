@@ -1,0 +1,38 @@
+{
+  "usuario": {
+    "edad": 58,
+    "genero": "M",
+    "grupo_sanguineo": "O+",
+    "peso_kg": 92,
+    "altura_cm": 172
+  },
+  "sintomas": [
+    {
+      "nombre": "Dolor de cabeza",
+      "severidad": "Alta"
+    },
+    {
+      "nombre": "Mareo",
+      "severidad": "Moderada"
+    },
+    {
+      "nombre": "Palpitaciones",
+      "severidad": "Moderada"
+    },
+    {
+      "nombre": "Visión borrosa",
+      "severidad": "Leve"
+    }
+  ],
+  "diagnosticos": [
+    {
+      "descripcion": "Hipertensión arterial"
+    }
+  ],
+  "medicamentos": [
+    {
+      "nombre": "Losartán",
+      "concentracion": "50 mg"
+    }
+  ]
+}

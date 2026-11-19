@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClinIQ - Dashboard</title>
+    <link rel="stylesheet" href="Dashboard.css" />
+  </head>
+  <body>
+    <!-- Estructura que renderiza Dashboard.tsx (referencia estática) -->
+    <div class="dashboard">
+      <!-- NAVBAR (el menú cambia según el rol: P, M o C) -->
+      <nav class="dashboard-navbar">
+        <div class="navbar-logo">
+          <img src="/favicon.svg" alt="ClinIQ Logo" class="logo-icon" />
+          <span class="logo-text">ClinIQ</span>
+        </div>
+
+        <div class="navbar-menu">
+          <a href="#inicio" class="nav-item nav-link active">Inicio</a>
+          <div class="nav-item nav-dropdown">
+            <span>Menú desplegable</span>
+            <span class="chevron">⌄</span>
+          </div>
+          <a href="#telemedicina" class="nav-item nav-link">Telemedicina</a>
+        </div>
+
+        <div class="navbar-right">
+          <button class="logout-btn" data-text="log out">log out</button>
+          <button class="notification-btn" aria-label="Notificaciones"></button>
+          <div class="account-dropdown-wrapper">
+            <div class="account-info">
+              <div class="account-name">Nombre de usuario</div>
+              <div class="account-role">Rol</div>
+              <div class="account-bottom"><span class="email">correo@cliniq.com</span></div>
+            </div>
+            <div class="profile-circle">U</div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- CONTENIDO: vista activa según el rol -->
+      <main class="dashboard-content"></main>
+    </div>
+  </body>
+</html>

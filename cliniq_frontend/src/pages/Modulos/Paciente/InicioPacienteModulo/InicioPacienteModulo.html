@@ -1,0 +1,69 @@
+﻿<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClinIQ - Inicio</title>
+    <link rel="stylesheet" href="InicioPacienteModulo.css" />
+  </head>
+  <body>
+    <!-- Estructura que renderiza InicioPacienteModulo.tsx (referencia estática) -->
+    <div class="pac-page">
+      <header class="pac-cabecera">
+        <div class="pac-avatar">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="16" rx="3" /><path d="M8 3v4M16 3v4M3 10h18" />
+          </svg>
+        </div>
+        <div>
+          <h1>Mis Citas</h1>
+          <p>Revisa tus próximas atenciones. La coordinación confirma cada solicitud y te asigna médico y horario.</p>
+        </div>
+      </header>
+
+      <section class="pac-tarjeta">
+        <div class="pac-tarjeta-cab">
+          <div><h2>Próxima cita</h2><p>Tu siguiente atención confirmada.</p></div>
+          <button class="pac-btn">+ Reservar cita</button>
+        </div>
+        <div class="pac-item pac-item--destacado">
+          <div class="pac-fecha"><strong>20</strong><span>09:30</span></div>
+          <div class="pac-info">
+            <h3>Dra. Rojas <span class="pac-badge">Virtual</span></h3>
+            <p>Cardiología · 2026-11-20</p>
+          </div>
+          <div class="pac-acciones">
+            <a class="pac-btn pac-btn--solido" href="#">Unirse a Google Meet</a>
+            <button class="pac-btn">Reprogramar</button>
+          </div>
+        </div>
+      </section>
+
+      <div class="pac-grid">
+        <section class="pac-tarjeta">
+          <div class="pac-tarjeta-cab"><div><h2>Todas mis citas</h2><p>Estado de cada solicitud.</p></div></div>
+          <div class="pac-lista">
+            <div class="pac-item">
+              <div class="pac-info"><h3>Medicina general</h3><p>Dr. Vargas · 2026-11-25 · 15:00</p><p>Presencial</p></div>
+              <span class="pac-estado pac-estado--confirmada">Confirmada</span>
+              <button class="pac-btn pac-btn--peligro">Cancelar</button>
+            </div>
+            <div class="pac-item">
+              <div class="pac-info"><h3>Dermatología</h3><p>Por asignar · 2026-12-02</p><p>Presencial</p></div>
+              <span class="pac-estado pac-estado--solicitada">Solicitada</span>
+              <button class="pac-btn pac-btn--peligro">Cancelar</button>
+            </div>
+          </div>
+        </section>
+        <section class="pac-tarjeta">
+          <div class="pac-tarjeta-cab"><div><h2>Resumen</h2><p>Tu actividad de citas.</p></div></div>
+          <div class="pac-resumen">
+            <div class="pac-dato"><span>Confirmadas</span><strong>2</strong></div>
+            <div class="pac-dato"><span>Esperando confirmación</span><strong>1</strong></div>
+            <div class="pac-dato"><span>Total registradas</span><strong>3</strong></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>

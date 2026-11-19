@@ -1,0 +1,143 @@
+﻿<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClinIQ - Gestión de Usuarios</title>
+    <link rel="stylesheet" href="GestionUsuarios.css" />
+  </head>
+  <body>
+    <!-- Estructura que renderiza GestionUsuarios.tsx (referencia estática) -->
+    <div class="gu-page">
+      <div class="gu-head">
+        <div>
+          <h2>Gestión de usuarios</h2>
+          <p>Pacientes, médicos y coordinadores registrados en ClinIQ.</p>
+        </div>
+        <button class="gu-btn gu-btn--primary">Nuevo usuario</button>
+      </div>
+
+      <section class="gu-card">
+        <div class="gu-toolbar">
+          <input
+            type="search"
+            class="gu-search"
+            placeholder="Buscar por nombre, CI o teléfono"
+            aria-label="Buscar usuarios"
+          />
+          <div class="gu-tabs" role="tablist" aria-label="Filtrar por rol">
+            <button class="gu-tab is-active" role="tab" aria-selected="true">Todos <span class="gu-count">4</span></button>
+            <button class="gu-tab" role="tab" aria-selected="false">Pacientes <span class="gu-count">2</span></button>
+            <button class="gu-tab" role="tab" aria-selected="false">Médicos <span class="gu-count">1</span></button>
+            <button class="gu-tab" role="tab" aria-selected="false">Coordinadores <span class="gu-count">1</span></button>
+          </div>
+        </div>
+
+        <div class="gu-table-wrap">
+          <table class="gu-table">
+            <thead>
+              <tr>
+                <th>Usuario</th>
+                <th>CI</th>
+                <th>Teléfono</th>
+                <th>Edad</th>
+                <th>Rol</th>
+                <th class="gu-th-actions">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="gu-user">
+                    <span class="gu-avatar">A</span>
+                    <div>
+                      <strong>Ana Rojas</strong>
+                      <small>paciente@mail.com</small>
+                    </div>
+                  </div>
+                </td>
+                <td>7654321</td>
+                <td>71234567</td>
+                <td>27 años</td>
+                <td><span class="gu-badge gu-badge--P">Paciente</span></td>
+                <td>
+                  <div class="gu-actions">
+                    <button class="gu-btn gu-btn--ghost gu-btn--sm">Editar</button>
+                    <button class="gu-btn gu-btn--danger gu-btn--sm">Eliminar</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <div class="gu-user">
+                    <span class="gu-avatar">D</span>
+                    <div>
+                      <strong>Dr. Carlos Pérez</strong>
+                      <small>medico@mail.com</small>
+                      <small>Medicina General, Cardiología</small>
+                    </div>
+                  </div>
+                </td>
+                <td>1234567</td>
+                <td>70000000</td>
+                <td>41 años</td>
+                <td><span class="gu-badge gu-badge--M">Médico</span></td>
+                <td>
+                  <div class="gu-actions">
+                    <button class="gu-btn gu-btn--ghost gu-btn--sm">Editar</button>
+                    <button class="gu-btn gu-btn--danger gu-btn--sm">Eliminar</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <div class="gu-user">
+                    <span class="gu-avatar">C</span>
+                    <div>
+                      <strong>Carlos Admin <em class="gu-you">(tú)</em></strong>
+                      <small>coordinador2@mail.com</small>
+                    </div>
+                  </div>
+                </td>
+                <td>1122334</td>
+                <td>72223333</td>
+                <td>38 años</td>
+                <td><span class="gu-badge gu-badge--C">Coordinador</span></td>
+                <td>
+                  <div class="gu-actions">
+                    <button class="gu-btn gu-btn--ghost gu-btn--sm">Editar</button>
+                    <button class="gu-btn gu-btn--danger gu-btn--sm" disabled title="No puedes eliminar tu propia cuenta">Eliminar</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <div class="gu-user">
+                    <span class="gu-avatar">B</span>
+                    <div>
+                      <strong>Brandon</strong>
+                      <small>123@gmail.com</small>
+                    </div>
+                  </div>
+                </td>
+                <td>12312312</td>
+                <td>—</td>
+                <td>0 años</td>
+                <td><span class="gu-badge gu-badge--P">Paciente</span></td>
+                <td>
+                  <div class="gu-actions">
+                    <button class="gu-btn gu-btn--ghost gu-btn--sm">Editar</button>
+                    <button class="gu-btn gu-btn--danger gu-btn--sm">Eliminar</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

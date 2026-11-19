@@ -1,0 +1,632 @@
+﻿/* ================= PÁGINA ================= */
+.reserva-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 40px 5%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #0f172a;
+  background: #ffffff;
+}
+
+.reserva-page > * {
+  width: 100%;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+/* ================= CABECERA ================= */
+.reserva-hero p {
+  margin: 0;
+  max-width: 760px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+/* ================= FLUJO / TARJETAS CON ICONO ================= */
+.flow-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+}
+
+.flow-grid-info {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.flow-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.flow-icon {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f4f3;
+  border-radius: 10px;
+  color: #357e65;
+}
+
+.flow-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.flow-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.flow-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: #94a3b8;
+}
+
+.flow-text strong {
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #0f172a;
+}
+
+.flow-arrow {
+  color: #94a3b8;
+  font-size: 14px;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .flow-grid,
+  .flow-grid-info {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 20px;
+  }
+  .flow-arrow {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .flow-grid,
+  .flow-grid-info {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================= LAYOUT PRINCIPAL ================= */
+.reserva-layout {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .reserva-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================= PANELES ================= */
+.reserva-panel {
+  background: #f4f7f6;
+  border-radius: 12px;
+  padding: 28px;
+  box-sizing: border-box;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.panel-head .flow-icon {
+  background: #ffffff;
+}
+
+.panel-head h3 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.panel-head p {
+  margin: 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* ================= FORMULARIO ================= */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid #d5dfdb;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #0f172a;
+  background: #ffffff;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus {
+  border-color: #357e65;
+  box-shadow: 0 0 0 3px rgba(53, 126, 101, 0.12);
+}
+
+@media (max-width: 560px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================= BUSCADOR DE SÍNTOMAS ================= */
+.sintomas-wrap {
+  position: relative;
+}
+
+.sintomas-input-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 6px 12px;
+  background: #ffffff;
+  border: 1px solid #d5dfdb;
+  border-radius: 8px;
+  box-sizing: border-box;
+  cursor: text;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sintomas-input-container.focus {
+  border-color: #357e65;
+  box-shadow: 0 0 0 3px rgba(53, 126, 101, 0.12);
+}
+
+.sintomas-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.sintoma-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #e6f0ec;
+  color: #2a634f;
+  border: 1px solid #c5dcd2;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sintoma-tag button {
+  background: none;
+  border: none;
+  color: #357e65;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+.sintoma-tag button:hover {
+  color: #1f4a3b;
+}
+
+input.sintomas-search {
+  flex: 1;
+  min-width: 160px;
+  border: none !important;
+  background: transparent !important;
+  padding: 6px 0 !important;
+  box-shadow: none !important;
+  font-size: 14px;
+}
+
+.sintomas-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  max-height: 220px;
+  overflow-y: auto;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  padding: 6px;
+  margin: 0;
+  z-index: 50;
+  box-sizing: border-box;
+}
+
+.sintomas-dropdown li {
+  padding: 9px 12px;
+  font-size: 13.5px;
+  color: #475569;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.15s ease;
+}
+
+.sintomas-dropdown li:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.sintomas-dropdown li.no-results {
+  cursor: default;
+}
+
+/* ================= BOTÓN Y ERROR ================= */
+.btn-primary-action {
+  width: 100%;
+  margin-top: 20px;
+  background: #357e65;
+  color: #ffffff;
+  border: none;
+  padding: 13px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-primary-action:hover {
+  background: #2a634f;
+}
+
+.btn-primary-action:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.error-ia {
+  margin-top: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #dc2626;
+}
+
+/* ================= RESULTADO ================= */
+.resultado-ia-box {
+  margin-top: 24px;
+  border-radius: 10px;
+  padding: 18px 20px;
+  border: 1px solid;
+  animation: reserva-fadeIn 0.3s ease-out;
+}
+
+@keyframes reserva-fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.resultado-ia-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.resultado-ia-title {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.resultado-ia-desc {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.badge-prioridad {
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.resultado-ia-box.nivel-rojo { background: #fef2f2; border-color: #fecaca; }
+.badge-prioridad.rojo { background: #dc2626; }
+.resultado-ia-box.nivel-rojo .resultado-ia-title,
+.resultado-ia-box.nivel-rojo .resultado-ia-desc { color: #991b1b; }
+
+.resultado-ia-box.nivel-naranja { background: #fff7ed; border-color: #fed7aa; }
+.badge-prioridad.naranja { background: #ea580c; }
+.resultado-ia-box.nivel-naranja .resultado-ia-title,
+.resultado-ia-box.nivel-naranja .resultado-ia-desc { color: #9a3412; }
+
+.resultado-ia-box.nivel-amarillo { background: #fefce8; border-color: #fef08a; }
+.badge-prioridad.amarillo { background: #ca8a04; }
+.resultado-ia-box.nivel-amarillo .resultado-ia-title,
+.resultado-ia-box.nivel-amarillo .resultado-ia-desc { color: #854d0e; }
+
+.resultado-ia-box.nivel-verde { background: #f0fdf4; border-color: #bbf7d0; }
+.badge-prioridad.verde { background: #16a34a; }
+.resultado-ia-box.nivel-verde .resultado-ia-title,
+.resultado-ia-box.nivel-verde .resultado-ia-desc { color: #166534; }
+
+.resultado-ia-box.nivel-azul { background: #eff6ff; border-color: #bfdbfe; }
+.badge-prioridad.azul { background: #2563eb; }
+.resultado-ia-box.nivel-azul .resultado-ia-title,
+.resultado-ia-box.nivel-azul .resultado-ia-desc { color: #1e40af; }
+
+/* ================= HISTORIAL ================= */
+.recent-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.recent-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid #e3ebe8;
+}
+
+.recent-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.recent-patient-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.recent-patient-desc {
+  font-size: 12.5px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.recent-right {
+  text-align: right;
+  min-width: 100px;
+}
+
+.recent-time {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+.badge-text { font-weight: 700; font-size: 12px; }
+.badge-text.rojo { color: #dc2626; }
+.badge-text.naranja { color: #ea580c; }
+.badge-text.amarillo { color: #ca8a04; }
+.badge-text.verde { color: #16a34a; }
+.badge-text.azul { color: #2563eb; }
+
+.text-muted {
+  color: #94a3b8;
+  font-style: italic;
+  font-size: 14px;
+  margin: 0;
+}
+/* =====================================================================
+   NUEVO: selectores con buscador, listas desplegables y resultado ampliado
+   ===================================================================== */
+.form-section-title {
+  grid-column: 1 / -1;
+  margin: 10px 0 -4px;
+  padding-top: 12px;
+  border-top: 1px solid #e3ebe8;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #357e65;
+}
+
+.form-grid > .form-section-title:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.form-hint {
+  margin: 4px 0 8px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #94a3b8;
+}
+
+.form-grid > .form-hint.full-width {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.label-row label {
+  margin-bottom: 4px;
+}
+
+.contador {
+  font-size: 12px;
+  font-weight: 500;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+/* Listas desplegables simples (mismo estilo que los inputs) */
+.form-group select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid #d5dfdb;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #0f172a;
+  background: #ffffff;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group select:focus {
+  border-color: #357e65;
+  box-shadow: 0 0 0 3px rgba(53, 126, 101, 0.12);
+}
+
+/* Intensidad (deslizador) */
+.form-group input[type="range"] {
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  accent-color: #357e65;
+  cursor: pointer;
+}
+
+/* Casilla "recordar" */
+.form-group label.check-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+}
+
+.form-group label.check-row input {
+  width: auto;
+  margin-top: 2px;
+  padding: 0;
+  accent-color: #357e65;
+}
+
+/* Etiquetas de señales de alarma en tono de aviso */
+.sintoma-tag.alarma {
+  background: #fef2f2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
+.sintoma-tag.alarma button {
+  color: #dc2626;
+}
+
+/* Encabezados de grupo dentro del desplegable */
+.sintomas-dropdown li.grupo-titulo {
+  padding: 10px 12px 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  cursor: default;
+}
+
+.sintomas-dropdown li.grupo-titulo:hover {
+  background: transparent;
+  color: #94a3b8;
+}
+
+.sintomas-dropdown li.aviso-max {
+  color: #9a3412;
+}
+
+.sintomas-dropdown li.aviso-max:hover,
+.sintomas-dropdown li.no-results:hover {
+  background: transparent;
+}
+
+/* Botón secundario */
+.btn-secondary-action {
+  width: 100%;
+  margin-top: 10px;
+  background: transparent;
+  color: #2a634f;
+  border: 1px solid #c5dcd2;
+  padding: 11px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-secondary-action:hover {
+  background: #e6f0ec;
+}
+
+.btn-secondary-action:disabled {
+  color: #94a3b8;
+  border-color: #e2e8f0;
+  cursor: not-allowed;
+}
+
+/* Resultado ampliado */
+.resultado-ia-desc + .resultado-ia-desc {
+  margin-top: 6px;
+}
+
+.resultado-ia-nota {
+  font-style: italic;
+}
+
+.resultado-ia-aviso {
+  margin-top: 12px;
+  font-size: 12px;
+  opacity: 0.8;
+}

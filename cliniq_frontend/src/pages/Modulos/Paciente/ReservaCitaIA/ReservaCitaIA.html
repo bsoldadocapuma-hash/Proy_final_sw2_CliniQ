@@ -1,0 +1,105 @@
+﻿<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClinIQ - Reserva de Cita IA</title>
+    <link rel="stylesheet" href="ReservaCitaIA.css" />
+  </head>
+  <body>
+    <!-- Estructura que renderiza ReservaCitaIA.tsx (referencia estática) -->
+    <div class="reserva-page">
+      <header class="reserva-hero">
+        <h2>Reserva de Cita con IA</h2>
+        <p>Describe tus síntomas y signos vitales. El asistente prioriza tu atención según la <b>Escala Manchester</b>.</p>
+      </header>
+
+      <!-- FLUJO -->
+      <section class="flow-grid">
+        <div class="flow-card">
+          <div class="flow-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4" /><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1" /></svg>
+          </div>
+          <div class="flow-text"><span class="flow-label">Paso 1</span><strong>Confirma tus datos.</strong></div>
+        </div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-card">
+          <div class="flow-icon"></div>
+          <div class="flow-text"><span class="flow-label">Paso 2</span><strong>Indica tus síntomas.</strong></div>
+        </div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-card">
+          <div class="flow-icon"></div>
+          <div class="flow-text"><span class="flow-label">Paso 3</span><strong>Ingresa tus signos vitales.</strong></div>
+        </div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-card">
+          <div class="flow-icon"></div>
+          <div class="flow-text"><span class="flow-label">Paso 4</span><strong>La IA clasifica tu caso.</strong></div>
+        </div>
+      </section>
+
+      <!-- INFO -->
+      <section class="flow-grid flow-grid-info">
+        <div class="flow-card"><div class="flow-icon"></div><div class="flow-text"><span class="flow-label">Atendidos hoy</span><strong>48 pacientes.</strong></div></div>
+        <div class="flow-card"><div class="flow-icon"></div><div class="flow-text"><span class="flow-label">Precisión modelo IA</span><strong>98.2% de acierto.</strong></div></div>
+        <div class="flow-card"><div class="flow-icon"></div><div class="flow-text"><span class="flow-label">Escala</span><strong>Manchester de 5 niveles.</strong></div></div>
+        <div class="flow-card"><div class="flow-icon"></div><div class="flow-text"><span class="flow-label">Respuesta</span><strong>Resultado en segundos.</strong></div></div>
+      </section>
+
+      <div class="reserva-layout">
+        <!-- FORMULARIO -->
+        <section class="reserva-panel">
+          <div class="panel-head">
+            <div class="flow-icon"></div>
+            <div><h3>Registro y signos vitales</h3><p>Completa el formulario para clasificar tu caso.</p></div>
+          </div>
+
+          <form>
+            <div class="form-grid">
+              <div class="form-group full-width"><label>Nombre completo del paciente</label><input type="text" /></div>
+
+              <div class="form-group full-width sintomas-wrap">
+                <label>Sintomatología / motivos de consulta</label>
+                <div class="sintomas-input-container">
+                  <div class="sintomas-tags"><span class="sintoma-tag">Fiebre <button type="button">&times;</button></span></div>
+                  <input type="text" class="sintomas-search" placeholder="Añadir otro síntoma..." />
+                </div>
+              </div>
+
+              <div class="form-group"><label>Edad</label><input type="number" /></div>
+              <div class="form-group"><label>Saturación O₂ (%)</label><input type="number" /></div>
+              <div class="form-group"><label>Frecuencia cardíaca (LPM)</label><input type="number" /></div>
+              <div class="form-group"><label>Presión arterial (mmHg)</label><input type="text" placeholder="Ej. 135/85" /></div>
+              <div class="form-group full-width"><label>Temperatura (°C)</label><input type="number" step="0.1" /></div>
+            </div>
+
+            <button type="submit" class="btn-primary-action">Clasificar y reservar con IA</button>
+          </form>
+
+          <div class="resultado-ia-box nivel-naranja">
+            <div class="resultado-ia-header">
+              <span class="resultado-ia-title">Resultado de evaluación ClinIQ</span>
+              <span class="badge-prioridad naranja">Nivel 3 - Urgente</span>
+            </div>
+            <p class="resultado-ia-desc"><b>Sugerencia asistida:</b> Pendiente. Derivar a Triaje General.</p>
+          </div>
+        </section>
+
+        <!-- HISTORIAL -->
+        <section class="reserva-panel">
+          <div class="panel-head">
+            <div class="flow-icon"></div>
+            <div><h3>Mis últimas clasificaciones</h3><p>Resultados de esta sesión.</p></div>
+          </div>
+          <div class="recent-list">
+            <div class="recent-item">
+              <div><div class="recent-patient-name">Fiebre, Tos seca</div><div class="recent-patient-desc">PAC-1234</div></div>
+              <div class="recent-right"><span class="badge-text naranja">Nivel 3 - Urgente</span><div class="recent-time">Justo ahora</div></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>

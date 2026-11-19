@@ -1,0 +1,85 @@
+﻿<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClinIQ - Alertas de Riesgo</title>
+    <link rel="stylesheet" href="AlertasRiesgo.css" />
+  </head>
+  <body>
+    <!-- Estructura que renderiza AlertasRiesgo.tsx (referencia estática) -->
+    <div class="alr-page">
+      <header class="alr-cabecera">
+        <div class="alr-avatar">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3 2 20h20L12 3z" /><path d="M12 10v4M12 17.5v.01" />
+          </svg>
+        </div>
+        <div>
+          <h1>Alertas de Riesgo</h1>
+          <p>Pacientes con patrones de riesgo detectados. Es un apoyo a tu decisión clínica, no un diagnóstico.</p>
+        </div>
+      </header>
+
+      <div class="alr-stats">
+        <div class="alr-stat"><span>Alertas pendientes</span><strong>3</strong></div>
+        <div class="alr-stat alr-stat--alto"><span>Riesgo alto</span><strong>1</strong></div>
+        <div class="alr-stat alr-stat--medio"><span>Riesgo medio</span><strong>1</strong></div>
+        <div class="alr-stat"><span>Riesgo bajo</span><strong>1</strong></div>
+      </div>
+
+      <section class="alr-tarjeta">
+        <div class="alr-filtros">
+          <label class="alr-campo"><span>Buscar paciente</span><input placeholder="Nombre del paciente" /></label>
+          <label class="alr-campo"><span>Nivel de riesgo</span><select><option>Todos</option></select></label>
+          <label class="alr-check"><input type="checkbox" /> Mostrar revisadas</label>
+        </div>
+
+        <div class="alr-lista">
+          <article class="alr-card alr-card--alto">
+            <div class="alr-card-cab">
+              <div>
+                <h3>María Gómez <span class="alr-nivel alr-nivel--alto">Riesgo alto</span></h3>
+                <p class="alr-diag">Riesgo cardiovascular</p>
+              </div>
+              <div class="alr-prob"><strong>82%</strong><span>probabilidad máx.</span></div>
+            </div>
+            <p class="alr-sub"><strong>Patrones detectados:</strong> Patrón asociado a riesgo cardiovascular</p>
+            <p class="alr-sub"><strong>Detectada:</strong> 2026-11-19 · 08:00 &nbsp;|&nbsp; <strong>Próxima cita:</strong> 2026-11-19 09:00</p>
+            <p class="alr-sub"><strong>Alergias:</strong> <span class="alr-chip alr-chip--mal">Penicilina</span></p>
+
+            <div class="alr-matriz">
+              <h4>Matriz de probabilidades</h4>
+              <div class="alr-barra"><span>Cardiovascular</span><div class="alr-barra-fondo"><div class="alr-barra-valor alr-barra-valor--alto" style="width:82%"></div></div><strong>82%</strong></div>
+              <div class="alr-barra"><span>Respiratorio</span><div class="alr-barra-fondo"><div class="alr-barra-valor alr-barra-valor--alto" style="width:11%"></div></div><strong>11%</strong></div>
+              <div class="alr-barra"><span>Metabólico</span><div class="alr-barra-fondo"><div class="alr-barra-valor alr-barra-valor--alto" style="width:7%"></div></div><strong>7%</strong></div>
+            </div>
+
+            <div class="alr-acciones">
+              <button class="alr-btn">Ocultar detalle</button>
+              <button class="alr-btn">Ver expediente</button>
+              <button class="alr-btn alr-btn--solido">Marcar como revisada</button>
+            </div>
+          </article>
+
+          <article class="alr-card alr-card--medio">
+            <div class="alr-card-cab">
+              <div>
+                <h3>Jorge Ríos <span class="alr-nivel alr-nivel--medio">Riesgo medio</span></h3>
+                <p class="alr-diag">Control irregular</p>
+              </div>
+              <div class="alr-prob"><strong>61%</strong><span>probabilidad máx.</span></div>
+            </div>
+            <p class="alr-sub"><strong>Patrones detectados:</strong> Antecedentes y controles irregulares</p>
+            <p class="alr-sub"><strong>Detectada:</strong> 2026-11-19 · 08:10</p>
+            <div class="alr-acciones">
+              <button class="alr-btn">Ver matriz de probabilidades</button>
+              <button class="alr-btn">Ver expediente</button>
+              <button class="alr-btn alr-btn--solido">Marcar como revisada</button>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

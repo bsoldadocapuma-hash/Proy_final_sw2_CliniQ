@@ -1,0 +1,35 @@
+{
+  "resultado_prediccion": {
+    "diagnostico_principal": "Diabetes",
+    "nivel_riesgo": "Alto",
+    "probabilidad_maxima": 0.9631,
+    "matriz_probabilidades": [
+      {
+        "enfermedad": "Diabetes",
+        "probabilidad": 0.9631
+      },
+      {
+        "enfermedad": "Hipertensión arterial",
+        "probabilidad": 0.5635
+      },
+      {
+        "enfermedad": "Obesidad",
+        "probabilidad": 0.251
+      },
+      {
+        "enfermedad": "Síndrome metabólico",
+        "probabilidad": 0.0303
+      },
+      {
+        "enfermedad": "Enfermedades renales crónicas o agudas",
+        "probabilidad": 0.0284
+      }
+    ],
+    "datos_para_tabla_alerta_riesgo": {
+      "nivel_riesgo_db": "Crítico",
+      "patrones_detectados": "Sed excesiva Alta + Micción frecuente Moderada + Historial Hipertensión + Visión borrosa Leve"
+    },
+    "advertencias": [],
+    "aviso": "Sugerencia de apoyo a la decisión clínica generada por un modelo de aprendizaje automático. No constituye un diagnóstico: el diagnóstico definitivo lo confirma el médico."
+  }
+}

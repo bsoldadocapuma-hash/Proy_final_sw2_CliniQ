@@ -1,0 +1,29 @@
+{
+  "usuario": {
+    "edad": 45,
+    "genero": "M",
+    "grupo_sanguineo": "O+",
+    "peso_kg": 85,
+    "altura_cm": 175
+  },
+  "sintomas": [
+    { "nombre": "Sed excesiva", "severidad": "Alta" },
+    { "nombre": "Micción frecuente", "severidad": "Moderada" },
+    { "nombre": "Visión borrosa", "severidad": "Leve" },
+    { "nombre": "Fatiga", "severidad": "Moderada" }
+  ],
+  "diagnosticos": [
+    { "descripcion": "Hipertensión arterial", "indicacion": "Control mensual de presión" }
+  ],
+  "medicamentos": [
+    {
+      "nombre": "Losartán",
+      "forma_farmaceutica": "Tableta",
+      "concentracion": "50 mg",
+      "frecuencia": "cada 24 horas",
+      "duracion": "30 días",
+      "via_administracion": "oral",
+      "dosis": "1 tableta"
+    }
+  ]
+}

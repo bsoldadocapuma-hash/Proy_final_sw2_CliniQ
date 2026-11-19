@@ -1,0 +1,145 @@
+﻿<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClinIQ - Perfil del Paciente</title>
+    <link rel="stylesheet" href="PerfilPacienteModulo.css" />
+  </head>
+  <body>
+    <!-- Estructura que renderiza PerfilPacienteModulo.tsx (referencia estática) -->
+    <div class="perfil-paciente-container-full">
+      <!-- CABECERA -->
+      <div class="perfil-header">
+        <div class="avatar-anonimo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        </div>
+        <div>
+          <h2>Mi Expediente y Perfil</h2>
+          <p>Administra tu información personal, alergias y pólizas de seguro médico.</p>
+        </div>
+      </div>
+
+      <div class="perfil-grid-completo">
+        <!-- 1. DATOS PERSONALES -->
+        <section class="perfil-card">
+          <div class="card-head">
+            <svg class="card-icon" viewBox="0 0 64 64" fill="none">
+              <polygon points="32,5 55,18.5 55,45.5 32,59 9,45.5 9,18.5" stroke="#357e65" stroke-width="1" />
+              <polygon points="32,20 44,27 44,41 32,48 20,41 20,27" stroke="#357e65" stroke-width="1" />
+              <circle cx="32" cy="32" r="1.6" fill="#357e65" />
+            </svg>
+            <div class="card-head-text">
+              <h3>Datos personales</h3>
+              <p>Tu identidad registrada en ClinIQ.</p>
+            </div>
+          </div>
+          <div class="datos-lista">
+            <div class="dato-item"><span class="label">Nombre completo</span><span class="value">Nombre del paciente</span></div>
+            <div class="dato-item"><span class="label">Carnet de Identidad (CI)</span><span class="value">1234567</span></div>
+            <div class="dato-item"><span class="label">Correo electrónico</span><span class="value">paciente@cliniq.com</span></div>
+          </div>
+        </section>
+
+        <!-- 2. CONTACTO Y SALUD -->
+        <section class="perfil-card">
+          <div class="card-head">
+            <svg class="card-icon" viewBox="0 0 64 64" fill="none">
+              <polygon points="32,8 58,18 32,28 6,18" stroke="#357e65" stroke-width="1" />
+              <polygon points="32,24 58,34 32,44 6,34" stroke="#357e65" stroke-width="1" />
+            </svg>
+            <div class="card-head-text">
+              <h3>Contacto y salud</h3>
+              <p>Datos de contacto y grupo sanguíneo.</p>
+            </div>
+            <button class="btn-outline-small">Editar</button>
+          </div>
+          <div class="datos-lista">
+            <div class="dato-item"><span class="label">Teléfono</span><span class="value">70000000</span></div>
+            <div class="dato-item"><span class="label">Dirección</span><span class="value">Av. Principal #123</span></div>
+            <div class="dato-item"><span class="label">Grupo sanguíneo</span><span class="value">O+</span></div>
+            <div class="dato-item"><span class="label">Contacto de emergencia</span><span class="value">71111111</span></div>
+          </div>
+        </section>
+
+        <!-- 3. ALERGIAS -->
+        <section class="perfil-card">
+          <div class="card-head">
+            <svg class="card-icon" viewBox="0 0 64 64" fill="none">
+              <ellipse cx="32" cy="32" rx="27" ry="10" stroke="#357e65" stroke-width="1" />
+              <ellipse cx="32" cy="32" rx="27" ry="10" stroke="#357e65" stroke-width="1" transform="rotate(60 32 32)" />
+              <ellipse cx="32" cy="32" rx="27" ry="10" stroke="#357e65" stroke-width="1" transform="rotate(120 32 32)" />
+            </svg>
+            <div class="card-head-text">
+              <h3>Alergias conocidas</h3>
+              <p>Ayudan al médico a evitar reacciones adversas.</p>
+            </div>
+          </div>
+          <div class="lista-items">
+            <div class="item-fila"><span>Penicilina</span><button class="btn-delete">X</button></div>
+          </div>
+          <div class="form-group-flex mt-3">
+            <input type="text" placeholder="Ej. Penicilina" class="perfil-input" />
+            <button class="btn-agregar-small">Añadir</button>
+          </div>
+        </section>
+
+        <!-- 4. MIS SEGUROS -->
+        <section class="perfil-card">
+          <div class="card-head">
+            <svg class="card-icon" viewBox="0 0 64 64" fill="none">
+              <polygon points="32,4 46,18 32,32 18,18" stroke="#357e65" stroke-width="1" />
+              <polygon points="18,24 32,38 18,52 4,38" stroke="#357e65" stroke-width="1" />
+              <polygon points="46,24 60,38 46,52 32,38" stroke="#357e65" stroke-width="1" />
+            </svg>
+            <div class="card-head-text">
+              <h3>Mis seguros médicos</h3>
+              <p>Pólizas registradas y seguro principal.</p>
+            </div>
+          </div>
+          <div class="lista-items">
+            <div class="item-fila principal">
+              <div>
+                <strong>Alianza</strong><span class="badge">Principal</span><br />
+                <span class="poliza-text">Póliza: POL-98765432</span>
+              </div>
+              <div class="botones-accion-seguro">
+                <button class="btn-delete">Eliminar</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. NUEVA PÓLIZA -->
+        <section class="perfil-card card-full">
+          <div class="card-head">
+            <svg class="card-icon" viewBox="0 0 64 64" fill="none">
+              <polygon points="32,8 58,18 32,28 6,18" stroke="#357e65" stroke-width="1" />
+              <polygon points="32,24 58,34 32,44 6,34" stroke="#357e65" stroke-width="1" />
+            </svg>
+            <div class="card-head-text">
+              <h3>Agregar nueva póliza</h3>
+              <p>Registra un seguro médico y márcalo como principal si corresponde.</p>
+            </div>
+          </div>
+          <form class="form-poliza">
+            <div class="form-group"><label>Nombre de la aseguradora</label><input type="text" class="perfil-input" placeholder="Ej. Alianza, BISA" /></div>
+            <div class="form-group"><label>Número de póliza</label><input type="text" class="perfil-input" placeholder="Ej. POL-98765432" /></div>
+            <div class="form-group span-2"><label>Tipo de cobertura</label><input type="text" class="perfil-input" placeholder="Ej. Completa, Hospitalaria" /></div>
+            <div class="form-group"><label>% Cobertura</label><input type="number" class="perfil-input" placeholder="80" /></div>
+            <div class="form-group"><label>Copago ($ / Bs)</label><input type="number" class="perfil-input" placeholder="50" /></div>
+            <div class="form-group"><label>Inicio vigencia</label><input type="date" class="perfil-input" /></div>
+            <div class="form-group"><label>Fin vigencia</label><input type="date" class="perfil-input" /></div>
+            <div class="form-group checkbox-group span-2">
+              <label><input type="checkbox" checked /> Marcar como seguro principal</label>
+            </div>
+            <div class="span-2"><button type="submit" class="btn-guardar-perfil">Guardar seguro médico</button></div>
+          </form>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>

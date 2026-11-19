@@ -1,0 +1,13 @@
+{
+  "edad": "18_64",
+  "sexo": "F",
+  "embarazo": "no",
+  "motivo_consulta": ["fiebre", "tos_garganta", "dolor_cabeza"],
+  "senales_alarma": ["ninguna"],
+  "intensidad": 4,
+  "inicio": "poco_a_poco",
+  "duracion": "1_dia",
+  "evolucion": "igual",
+  "enfermedades": ["diabetes", "hipertension"],
+  "temperatura": 38.2
+}

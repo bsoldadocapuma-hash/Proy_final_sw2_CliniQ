@@ -1,0 +1,115 @@
+﻿<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClinIQ - Crear Expediente</title>
+    <link rel="stylesheet" href="../../ClinIQExtras.css" />
+    <link rel="stylesheet" href="CrearExpediente.css" />
+  </head>
+  <body>
+    <!-- Estructura que renderiza CrearExpediente.tsx (referencia estática) -->
+    <div class="exp-page">
+      <header class="exp-cabecera">
+        <div class="exp-avatar">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" /><path d="M14 3v5h5M9 13h6M9 17h6" />
+          </svg>
+        </div>
+        <div>
+          <h1>Crear Expediente</h1>
+          <p>Registra el diagnóstico y la receta de la consulta. Al firmar, se genera la evidencia con hash y firma digital anclada en blockchain.</p>
+        </div>
+      </header>
+
+      <!-- Aparece solo después de firmar -->
+      <section class="exp-ok" role="status">
+        <h2>✓ Expediente firmado y registrado</h2>
+        <dl>
+          <dt>Hash del documento (SHA-256)</dt><dd>3f8a…c91e</dd>
+          <dt>Transacción en la red</dt><dd>0x9b2d…a7f0</dd>
+          <dt>Firma digital (ECDSA)</dt><dd>MEUCIQDx…==</dd>
+          <dt>Fecha y hora</dt><dd>2026-11-19 · 09:42</dd>
+        </dl>
+        <button class="med-btn">Cerrar</button>
+      </section>
+
+      <div class="exp-grid">
+        <div class="exp-columna">
+          <!-- Paso 1 -->
+          <section class="exp-paso">
+            <h2><span class="exp-num">1</span> Paciente y cita</h2>
+            <label class="frm-campo"><span>Cita a documentar</span>
+              <select><option>María Gómez · 2026-11-19 09:00 · Presencial</option></select>
+            </label>
+          </section>
+
+          <!-- Paso 2 -->
+          <section class="exp-paso">
+            <h2><span class="exp-num">2</span> Diagnóstico</h2>
+            <div class="frm" style="margin-bottom:0">
+              <label class="frm-campo frm-ancho"><span>Diagnóstico</span><textarea rows="3" placeholder="Diagnóstico clínico de la consulta"></textarea></label>
+              <label class="frm-campo frm-ancho"><span>Indicaciones al paciente</span><textarea rows="2" placeholder="Reposo, dieta, controles, signos de alarma…"></textarea></label>
+            </div>
+          </section>
+
+          <!-- Paso 3 -->
+          <section class="exp-paso">
+            <h2><span class="exp-num">3</span> Medicamentos y receta</h2>
+            <div class="exp-med">
+              <div class="frm-fila" style="grid-template-columns: 2fr 1fr 1fr 1fr 1fr">
+                <label class="frm-campo"><span>Medicamento</span><select><option>Amoxicilina 500 mg (Cápsula)</option></select></label>
+                <label class="frm-campo"><span>Dosis</span><input value="500 mg" /></label>
+                <label class="frm-campo"><span>Frecuencia</span><input placeholder="Cada 8 h" /></label>
+                <label class="frm-campo"><span>Duración</span><input placeholder="5 días" /></label>
+                <label class="frm-campo"><span>Vía</span><select><option>Oral</option></select></label>
+              </div>
+              <p class="exp-alerta">⚠ El paciente tiene alergia registrada a <strong>Penicilina</strong>. Este medicamento puede estar contraindicado.</p>
+            </div>
+            <button class="med-btn">+ Agregar medicamento</button>
+            <label class="exp-check"><input type="checkbox" /> Revisé las alergias del paciente y asumo esta prescripción.</label>
+          </section>
+
+          <!-- Paso 4 -->
+          <section class="exp-paso">
+            <h2><span class="exp-num">4</span> Firma digital y blockchain</h2>
+            <p class="exp-nota">Se calcula el hash SHA-256 del expediente, se firma con tu clave y se registra como evidencia inmutable. Después no se puede modificar sin que la verificación lo detecte.</p>
+            <button class="med-btn med-btn--solido">Firmar y registrar en blockchain</button>
+          </section>
+        </div>
+
+        <aside class="exp-lateral">
+          <section class="exp-tarjeta">
+            <h2>Contexto del paciente</h2>
+            <h3>María Gómez</h3>
+            <p class="exp-sub">Motivo: Dolor torácico leve</p>
+            <p class="exp-sub">Triaje: Prioridad Alta (sugerencia, no diagnóstico)</p>
+            <h4>Alergias</h4>
+            <span class="exp-chip exp-chip--mal">Penicilina</span>
+            <h4>Síntomas reportados</h4>
+            <p class="exp-sub"><strong>Dolor torácico</strong> · Leve. Dolor opresivo en el pecho</p>
+            <h4>Alerta de riesgo</h4>
+            <p class="exp-sub">Alto: Patrón asociado a riesgo cardiovascular</p>
+            <h4>Historial de diagnósticos</h4>
+            <p class="exp-sub"><strong>2026-10-20</strong> · Hipertensión arterial leve</p>
+          </section>
+        </aside>
+      </div>
+
+      <section class="exp-paso">
+        <h2>Expedientes firmados</h2>
+        <div class="exp-emitido">
+          <div>
+            <h3>María Gómez</h3>
+            <p class="exp-sub">2026-11-19 · 09:42 · Losartán 50 mg</p>
+            <p class="exp-sub">Hash: <code>3f8a1b2c9d…c91e04</code> · Tx: <code>0x9b2d4e7a1c…a7f0b3</code></p>
+          </div>
+          <div class="exp-emitido-acc">
+            <span class="exp-chip exp-chip--ok">✓ Íntegro y firma válida</span>
+            <button class="med-btn">Verificar integridad</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
